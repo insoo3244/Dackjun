@@ -2,16 +2,23 @@
 using namespace std;
 
 int main() {
-	int s;
+	long long s;
 	int n{ 1 };
-	int m{ 0 };
+	long long m{ 0 };
+	int count{ 0 };
 
 	cin >> s;
 
-	while (m <= s) {
+	while (1) {
 		m = m + n;
 		n++;
+		count++;
+		if(m > s){
+			count--;
+			break;
+		}
 	}
 
-	cout << n;
-}
+	cout << count;
+	return 0;
+}	
