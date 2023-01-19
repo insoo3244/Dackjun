@@ -21,10 +21,10 @@ int main() {
 			case '@':
 				num = num * 3.00;
 				break;
-			case'%':
+			case '%':
 				num = num + 5.00;
 				break;
-			case'#':
+			case '#':
 				num = num - 7.00;
 				break;
 			}
