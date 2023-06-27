@@ -1,0 +1,1 @@
+(arr.size() % 2 == 0 ? arr.size() / 2 - 1 : arr.size() / 2)
