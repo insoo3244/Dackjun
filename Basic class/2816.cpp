@@ -28,9 +28,18 @@ int main() {
         }
     }
 
-    for(int i = isKBS1; ){
-        chUp(chList);
+    bool repeat = 1; // 반복계수
+    // 주의할 점 : 채널의 위치를 옮길 때, 커서의 위치까지 전부 신경쓰기
+
+    // KBS1 위치 옮기기
+    while(repeat){
+        if(chList[0] == "KBS1") { repeat = 0; break; }
+
+        for(int i = isKBS1; i < 0; i--){
+            chUp(chList);
+        }
     }
+
     
 }
 
@@ -39,11 +48,17 @@ void chUp(vector<string> &v1) {
     temp = v1[cs];
     v1[cs] = v1[cs - 1];
     v1[cs - 1] = temp;
+
+    if(cs > 0) cs--; // 채널 위치를 옮기면서 커서도 같이 옮기기
+    
+    cout << "4";
 }
 
 void csDown(){
     if(cs >= 4) { return; }
     cs++;
+    
+    cout << "3";
 }
 
 /*
