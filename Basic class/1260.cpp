@@ -205,7 +205,6 @@ void DFS(graph &g, vector<int> &s, int start){
         if(gtemp[start - 1][i] == true) { // 갈림길이 있으면 여기서 분기 시작 & 재귀가 끝나면 다른 분기로 반복시작 
             s.push_back(i + 1);
             DFS(g, s, i + 1); // 재귀 시작
-            s.pop_back(); // 재귀를 마치고 값 방출
         }
     }
 }
