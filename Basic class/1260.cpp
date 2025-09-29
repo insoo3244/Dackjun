@@ -33,12 +33,14 @@ graph는 각 멤버를 가지게 됨
 - 정점의 개수
 - 간선의 개수
 - 간선의 정보를 저장할 동적 boolean 2차원 배열(이하 gArray로 칭함) -> (정점의 개수 x 정점의 개수) 크기의 배열 : 초기값은 모두 0. 간선이 이어져있는 노드끼리만 true로 초기화
+... 이후 더 추가 됨
 멤버함수
 - 생성자 함수 (멤버변수 초기화)
 - 소멸자 함수 (동적배열 소멸이 필요함)
 - gArray에 정보를 입력받을 함수
 - gArray의 정보를 불러와줄 boolean 반환 함수
 - get 함수 (각 멤버변수)
+.. 이후 더 추가 됨
 
 * 탐색 시, 주의할 점 : 거리가 같은 두 노드 중에 숫자가 작은 노드부터 탐색
 각 탐색함수는 그래프 객체, 자료구조를 인자로 받음
@@ -187,18 +189,20 @@ void DFS(graph &g, vector<int> &s, int start){
     bool** gtemp = g.getgArray(); 
     bool* vtemp = g.getVisitDFS();
 
-    if(vtemp[start - 1] == 1) { return; }
+    if(vtemp[start - 1] == 1) { return; } // 노드 중복 방문 시 종료
 
-    // 노드 방문 계수 갱신
+    // 노드 방문 계수 갱신 및 방문여부출력
     g.setTrueVisitDFS(start - 1);
     cout << start << " ";
     
     // DFS 구현
-    for(int i = 0; i < g.getVertex(); i++){
-        if(gtemp[start - 1][i] == true) {
+    for(int i = 0; i < g.getVertex(); i++){ // 쭉쭉 깊숙히 내려감
+        
+        // 인접 노드 발견 조건문
+        if(gtemp[start - 1][i] == true) { // 갈림길이 있으면 여기서 분기 시작 & 재귀가 끝나면 다른 분기로 반복시작 
             s.push_back(i + 1);
-            DFS(g, s, i + 1);
-            s.pop_back();
+            DFS(g, s, i + 1); // 재귀 시작
+            s.pop_back(); // 재귀를 마치고 값 방출
         }
     }
 }
@@ -207,23 +211,24 @@ void BFS(graph &g, queue<int> &q, int start){
     bool** gtemp = g.getgArray(); 
     bool* vtemp = g.getVisitBFS();
 
-    if(vtemp[start - 1] == true) { return; }
+    if(vtemp[start - 1] == true) { return; } // 노드 중복 방문 시 종료
 
     // 노드 방문 계수 갱신
     g.setTrueVisitBFS(start - 1);
 
     // BFS 구현
-    q.push(start);
-    while(!q.empty()){
-        cout << q.front() << " ";
+    q.push(start); // 일단 시작 노드를 큐에 넣고 시작
+    while(!q.empty()){ // 큐가 바닥날 때 까지 반복
+        cout << q.front() << " "; // 출력
 
         for(int i = 0; i < g.getVertex(); i++){
+            // 인접 노드 발견 조건문
             if(gtemp[q.front() - 1][i] == true){
-                if(vtemp[i] == true) continue;
-                q.push(i + 1);
-                g.setTrueVisitBFS(i);
+                if(vtemp[i] == true) continue; // 큐에 중복되는 값 투입 방지
+                q.push(i + 1); // 인접 노드 싹 다 우겨넣기
+                g.setTrueVisitBFS(i); // 방문 체크까지
             }
         }
-        q.pop();
+        q.pop(); // 시작노드 방출 & 노드 방출을 통해 다음 노드의 인접노드 검수 반복
     }
 }
