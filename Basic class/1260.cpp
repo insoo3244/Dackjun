@@ -113,6 +113,9 @@ public:
         }
         
         delete[] gArray;
+
+        delete[] visitDFS;
+        delete[] visitBFS;
     }
 
     // 그래프 정보 입력받기
