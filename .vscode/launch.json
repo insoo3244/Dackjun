@@ -2,16 +2,25 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(Windows) 시작",
-      "type": "cppvsdbg",
+      "name": "g++ 빌드 및 디버그",
+      "type": "cppdbg",
       "request": "launch",
-      //"program": "프로그램 이름 입력(예: ${workspaceFolder}/a.exe)",
-      "program": "${workspaceFolder}/test.exe",
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${fileDirname}",
       "environment": [],
-      "console": "externalTerminal"
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:\\minGW\\bin\\gdb.exe",
+      "setupCommands": [
+        {
+          "description": "gdb에 자동 서식 지정 사용",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "g++ build"
     }
   ]
 }
