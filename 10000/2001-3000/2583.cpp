@@ -84,7 +84,7 @@ int main(){
             find(j, i, m, n);
             
             // 0을 나누는 경우를 없애기 위한 삼중의문문
-            bACount += (cnt == 0 ? 0 : cnt /= cnt);
+            bACount += (temp == 0 ? 0 : 1);
 
             // temp가 0 이면, find가 조건에 걸려서 종료된 것
             if(temp != 0) vec.push_back(temp);
