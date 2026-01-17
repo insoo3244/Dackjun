@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int arr[25][25]; // 단지 크기
+bool arr[25][25]; // 단지 크기
 bool vis[25][25]; // 방문 체크
 
 // 탐색 방향 지정 배열
@@ -18,15 +18,25 @@ int aCnt = 0; // 총 단지 수
 int hCnt = 0; // 단지 내 집 수
 
 void DFS(int y, int x, int n){
-    if((x < 0 || x > n) || (y < 0 || y > n)) return;
-    if(arr[y][x] == 0 || vis[y][x]) return;
+    if((x < 0 || x >= n) || (y < 0 || y >= n)) 
+        {return;}
+    if(arr[y][x] == 0 || vis[y][x]) 
+        {return;}
 
     vis[y][x] = 1;
     aCnt++; // 집 수 연산
 
     // 방향 별 탐색 시작
     for(int i = 0; i < 4; i++){
-        DFS(y + dy[i], x + dx[i], n);
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+
+        if((nx < 0 || nx >= n) || (ny < 0 || ny >= n))
+            {continue;}
+        if(arr[ny][nx] == 0 || vis[ny][nx]) 
+            {continue;}
+
+        DFS(ny, nx, n);
     }
 }
 
@@ -60,7 +70,7 @@ int main(){
     }
 
     // 출력
-    cout << hCnt << endl; 
+    cout << hCnt << '\n'; 
     sort(vec.begin(), vec.end()); // 오름차순 정렬
-    for(auto x : vec) cout << x << endl;
+    for(auto x : vec) cout << x << '\n';
 }
