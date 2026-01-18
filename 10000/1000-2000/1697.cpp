@@ -56,7 +56,10 @@ void BFS(int n, int k){
         int curM = curLoct + dn[1]; // - 1
         int curT = curLoct * dn[2]; // * 2
         que.pop();
-        
+
+        // int next_moves[3] = {curLoct + 1, curLoct - 1, curLoct * 2};
+        // insoo3244 : 이거 사긴데 ?
+
         // 현재 위치 범위 검사
         if((curLoct < 0) || (curLoct > 100000)) { continue; }
 
