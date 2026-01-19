@@ -1,3 +1,6 @@
+// https://www.acmicpc.net/problem/7576
+// 2026-01-19
+
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -35,8 +38,8 @@ using namespace std;
 */
 
 int box[1000][1000]; // 창고 크기
-int wei[1000][1000]; // 날짜 가중치 저장 겸 방문 체크
 int max_wei = 0; // 가장 높은 날짜 가중치
+int tcnt = 0; // 창고 안의 총 익지 않은 토마토
 
 // 탐색 방향 지정 배열
 int dx[4] = {-1, 1, 0, 0};
@@ -45,17 +48,6 @@ int dy[4] = {0, 0, -1, 1};
 queue<pair<int,int>> q; // BFS에 이용할 창고 좌표 저장 큐
 
 void BFS(int m, int n){
-    // 모든 익은 토마토를 큐에 넣기
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            if(box[i][j] == 1){
-                q.push({j, i});
-                wei[i][j] = 1;
-            }
-        }
-    }
-    
-
     // 탐색 시작
     while(!q.empty()){
         // 현재 탐색 좌표 : cx, cy
@@ -72,15 +64,13 @@ void BFS(int m, int n){
             // 다음 탐색 창고가
             if((nx >= 0 && nx < m) && (ny >= 0 && ny < n)){ // 범위 내에 있고,
                 if(box[ny][nx] == 0){ // 익지 않은 토마토가 있으며,
-                    if(wei[ny][nx] == 0){ // 아직 탐색하지 않은 곳이면,
-                        q.push({nx, ny}); // 큐에 푸쉬
-                        wei[ny][nx] = wei[cy][cx] + 1; // 날짜 가중치 증가
-                        box[ny][nx] = 1; // 익은 토마토 표시
-
-                        // 추가로, 가장 높은 날짜 가중치 갱신
-                        if(wei[ny][nx] > max_wei) 
-                            max_wei = wei[ny][nx];
-                    }
+                    // 아직 탐색하지 않은 곳이면,
+                    q.push({nx, ny}); // 큐에 푸쉬
+                    box[ny][nx] = box[cy][cx] + 1; // 익은 토마토 표시
+                    tcnt--;
+                    // 추가로, 가장 높은 날짜 가중치 갱신
+                    if(box[ny][nx] > max_wei) 
+                        max_wei = box[ny][nx];
                 }
             }
         }
@@ -98,46 +88,30 @@ int main(){
     cin >> m >> n;
     
     // 창고 정보 입력
+    // 익은 토마토는 바로 큐에, 익지 않은 토마토는 tcnt로 연산하기
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
             cin >> box[i][j];
+            
+            if(box[i][j] == 1) // 익은 토마토
+                q.push({j, i});
+
+            if(box[i][j] == 0) // 익지 않은 토마토
+                tcnt++;
         }
     }
 
-    // 모든 토마토가 익었는지 확인하기
-    bool isOk = 1; // 전부 익었나
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            if(box[i][j] == 0){ // 안 익었나?
-                isOk = 0; // 안 익음
-                break;
-            }
-        }
-        if(!isOk) // 안 익음
-            break;
-    }
-
-    if(isOk){ // 전부 익었음
+    // bfs 전, 모든 토마토가 익었는지 확인하기
+    if(tcnt == 0){ // 전부 익었음
         cout << "0";
         return 0;
     }
 
+    // bfs로 토마토 익기 시뮬레이션
     BFS(m, n);
 
-    // 안 익은 토마토가 있는지 확인하기
-    isOk = 1; // 전부 익었을거임
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            if(box[i][j] == 0){ // 안 익었나?
-                isOk = 0; // 안 익음
-                break;
-            }
-        }
-        if(!isOk) // 안 익음
-            break;
-    }
-
-    if(!isOk){ // 전부 안익음
+    // bfs 후, 모든 토마토가 익었는지 확인하기
+    if(tcnt != 0){ // 전부 익지 않음
         cout << "-1";
         return 0;
     }
