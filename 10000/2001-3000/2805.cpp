@@ -55,7 +55,6 @@ int main() {
             if(mid > maxMeter){
                 maxMeter = mid;
             }
-
             low = mid + 1;
         }
         else{
