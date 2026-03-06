@@ -1,2 +1,2 @@
-ios_base::sync_with_stdio(false);
-    // cin.tie(NULL);
+
+        cout << "DEBUG: n = " << n << ", q = " << q << endl; // 이 줄 추가!
