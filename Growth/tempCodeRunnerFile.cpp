@@ -1,2 +1,3 @@
-
-        cout << "DEBUG: n = " << n << ", q = " << q << endl; // 이 줄 추가!
+while(++count < idx){
+        v = v->next;
+    }
