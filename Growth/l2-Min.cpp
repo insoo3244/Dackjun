@@ -5,14 +5,13 @@ using namespace std;
 
 class StringNode{
 public:
-    StringNode(int elem){
-        this->elem = elem;
+    StringNode(int value){
+        elem = value;
         next = nullptr;
     }
-
 private:
     int elem;
-    StringNode *next;
+    StringNode* next;
 
     friend class LinkedList;
 };
@@ -22,28 +21,27 @@ public:
     LinkedList();
     ~LinkedList();
 
-    int size() { return N; }
-
     void print();
-    void AddFront(const int &elem);
+    void AddFront(const int& value);
     void RemoveFront();
-    void Update(int idx, const int &elem);
+    void Update(int idx, const int& value);
     void Min();
 
-    bool empty() const;
+    bool empty() const{
+        if(!head) { return true; }
+        else { return false; }
+    }
+
 private:
     int N;
     StringNode* head;
     StringNode* tail;
 };
 
-LinkedList::LinkedList(){
-    N = 0;
-    head = tail = nullptr;
-}
+LinkedList::LinkedList() : N(0), head(nullptr), tail(nullptr){ }
 
-LinkedList::~LinkedList(){
-    while(!empty()) { RemoveFront(); }
+LinkedList::~LinkedList() {
+    while(empty()) { RemoveFront(); }
 }
 
 void LinkedList::print(){
@@ -52,21 +50,20 @@ void LinkedList::print(){
         return;
     }
 
-    StringNode *cur = head;
-    while(cur != tail -> next){
-        cout << cur->elem << " ";
-        cur = cur->next;
+    StringNode* v = head;
+    while(v != tail->next){
+        cout << v->elem << " ";
+        v = v->next;
     }
 
     cout << '\n';
 }
 
-void LinkedList::AddFront(const int &elem){
-    StringNode* v = new StringNode(elem);
-
+void LinkedList::AddFront(const int& value){
+    StringNode* v = new StringNode(value);
+    
     if(empty()){
         head = tail = v;
-        tail->next = nullptr;
     }
     else{
         v->next = head;
@@ -82,7 +79,8 @@ void LinkedList::RemoveFront(){
         return;
     }
 
-    StringNode *v = head;
+    StringNode* v = head;
+    cout << v->elem << '\n';
     if(N == 1){
         head = tail = nullptr;
     }
@@ -91,60 +89,49 @@ void LinkedList::RemoveFront(){
     }
 
     delete v;
-
-    --N;
+    N--;
 }
 
-void LinkedList::Min(){
-    if(empty()){
-        cout << "empty" << '\n';
-        return;
-    }
-
-    int min = 1001;
-    int count = 0;
-    int minIdx = 0;
-    StringNode* cur = head;
-    while(cur != tail->next){
-        if(cur->elem < min){
-            min = cur->elem;
-            minIdx = count;
-        }
-
-        cur = cur->next;
-        count++;
-    }
-
-    cout << minIdx << " " << min << '\n';
-}
-
-void LinkedList::Update(int idx, const int &elem){
-    if(idx >= size()){
+void LinkedList::Update(int idx, const int& value){
+    if(idx < 0 || idx >= N){
         cout << "error" << '\n';
         return;
     }
 
+    StringNode* v = head;
     int count = 0;
-    StringNode *v = head;
 
     while(count++ < idx){
         v = v->next;
     }
-
-    v->elem = elem;
+    
+    v->elem = value;
 }
 
-bool LinkedList::empty() const{
-    if(!head) { return true; }
-    else { return false; }
+void LinkedList::Min(){
+    int min = 1001;
+    int minIdx = 0;
+    int count = 0;
+
+    StringNode* v = head;
+    while(v != tail->next){
+        if(v->elem < min){
+            min = v->elem;
+            minIdx = count;
+        }
+
+        count++;
+        v = v->next;
+    }
+    
+    cout << minIdx << " " << min << '\n';
 }
 
-int main() {
+int main(){
     int m;
     cin >> m;
 
     LinkedList list;
-
     while(m--){
         string cmd;
         cin >> cmd;
@@ -156,7 +143,6 @@ int main() {
             int temp;
             cin >> temp;
 
-            StringNode node(temp);
             list.AddFront(temp);
         }
         else if(cmd == "RemoveFront"){
@@ -164,8 +150,8 @@ int main() {
         }
         else if(cmd == "Update"){
             int temp1, temp2;
-
             cin >> temp1 >> temp2;
+            
             list.Update(temp1, temp2);
         }
         else if(cmd == "Min"){

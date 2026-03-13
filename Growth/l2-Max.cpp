@@ -3,171 +3,168 @@
 
 using namespace std;
 
-class StringNode {
+class StringNode{
 public:
-	StringNode(int value) {
-		elem = value;
-		next = nullptr;
-	}
-
+    StringNode(int value){
+        elem = value;
+        next = nullptr;
+    }
 private:
-	int elem;
-	StringNode* next;
+    int elem;
+    StringNode* next;
 
-	friend class LinkedList;
+    friend class LinkedList;
 };
 
-class LinkedList {
+class LinkedList{
 public:
-	LinkedList();
-	~LinkedList();
+    LinkedList();
+    ~LinkedList();
 
-	void print();
-	void AddBack(const int& value);
-	void Removeback();
-	void Update(int idx, const int& value);
-	void Max();
+    void print();
+    void AddBack(const int& value);
+    void RemoveBack();
+    void Update(int idx, const int& value);
+    void Max();
 
-	bool empty() const {
-		if (!head) { return true;  }
-		else { return false; }
-	}
+    bool empty() const{
+        if(!head) { return true; }
+        else { return false; }
+    }
+
 private:
-	int N;
-	StringNode* head;
-	StringNode* tail;
+    int N;
+    StringNode* head;
+    StringNode* tail;
 };
 
-LinkedList::LinkedList() : N(0), head(nullptr), tail(nullptr) {}
+LinkedList::LinkedList() : N(0), head(nullptr), tail(nullptr){ }
 
 LinkedList::~LinkedList() {
-	while (empty()) { Removeback(); }
+    while(empty()) { RemoveBack(); }
 }
 
-void LinkedList::print() {
-	if (empty()) {
-		cout << "empty" << '\n';
-		return;
-	}
+void LinkedList::print(){
+    if(empty()){
+        cout << "empty" << '\n';
+        return;
+    }
 
-	StringNode* v = head;
-	while (v != tail->next) {
-		cout << v->elem << ' ';
-		v = v->next;
-	}
+    StringNode* v = head;
+    while(v != tail->next){
+        cout << v->elem << " ";
+        v = v->next;
+    }
 
-	cout << '\n';
+    cout << '\n';
 }
 
-void LinkedList::AddBack(const int& value) {
-	StringNode* v = new StringNode(value);
-
-	if (empty()) {
-		head = tail = v;
-		v->next = nullptr;
-	}
-	else {
-		tail->next = v;
-		tail = v;
+void LinkedList::AddBack(const int& value){
+    StringNode* v = new StringNode(value);
+    
+    if(empty()){
+        head = tail = v;
 		tail->next = nullptr;
-	}
+    }
+    else{
+        tail->next = v;
+		tail = v;
+        tail->next = nullptr;
+    }
 
-	++N;
+    ++N;
 }
 
-void LinkedList::Removeback() {
-	if (empty()) {
-		cout << "empty" << '\n';
-		return;
-	}
+void LinkedList::RemoveBack(){ // 자꾸 헷갈림
+    if(empty()){
+        cout << "empty" << '\n';
+        return;
+    }
 
-	StringNode* v = head;
-	if (N == 1) {
+    StringNode* v = head;
+    if(N == 1){
 		cout << v->elem << '\n';
-		head = tail = nullptr;
-
-	}
-	else {
-		while (v->next != tail) {
+        head = tail = nullptr;
+		delete v;
+    }
+    else{
+        while(v->next != tail){
 			v = v->next;
 		}
 
-		cout << tail->elem << '\n';
 		tail = v;
+		cout << tail->next->elem << '\n';
+		delete tail->next;
 		tail->next = nullptr;
+    }
 
-		v = v->next;
-	}
-
-	delete v;
-	N--;
+    N--;
 }
 
-void LinkedList::Update(int idx, const int& value) {
-	if (idx >= N) {
-		cout << "error" << '\n';
-		return;
-	}
+void LinkedList::Update(int idx, const int& value){
+    if(idx < 0 || idx >= N){
+        cout << "error" << '\n';
+        return;
+    }
 
-	StringNode* v = head;
-	int count = 0;
-	while (count++ < idx) {
-		v = v->next;
-	}
+    StringNode* v = head;
+    int count = 0;
 
-	v->elem = value;
+    while(count++ < idx){
+        v = v->next;
+    }
+    
+    v->elem = value;
 }
 
-void LinkedList::Max() {
-	StringNode* v = head;
+void LinkedList::Max(){
+    int max = 0;
+    int maxIdx = 0;
+    int count = 0;
 
-	int max = 0;
-	int idx = 0;
-	int count = 0;
+    StringNode* v = head;
+    while(v != tail->next){
+        if(v->elem > max){
+            max = v->elem;
+            maxIdx = count;
+        }
 
-	while (v != tail->next) {
-		if (v->elem > max) {
-			max = v->elem;
-			idx = count;
-		}
-
-		count++;
-		v = v->next;
-	}
-
-	cout << idx << " " << max << '\n';
+        count++;
+        v = v->next;
+    }
+    
+    cout << maxIdx << " " << max << '\n';
 }
 
-int main() {
-	int m;
-	cin >> m;
+int main(){
+    int m;
+    cin >> m;
 
-	LinkedList list;
+    LinkedList list;
+    while(m--){
+        string cmd;
+        cin >> cmd;
 
-	while (m--) {
-		string cmd;
-		cin >> cmd;
+        if(cmd == "Print"){
+            list.print();
+        }
+        else if(cmd == "AddBack"){
+            int temp;
+            cin >> temp;
 
-		if (cmd == "Print") {
-			list.print();
-		}
-		else if (cmd == "AddBack") {
-			int temp;
-			cin >> temp;
-
-			list.AddBack(temp);
-		}
-		else if (cmd == "RemoveBack") {
-			list.Removeback();
-		}
-		else if (cmd == "Update") {
-			int temp1, temp2;
-			cin >> temp1 >> temp2;
-
-			list.Update(temp1, temp2);
-		}
-		else if (cmd == "Max") {
-			list.Max();
-		}
-	}
+            list.AddBack(temp);
+        }
+        else if(cmd == "RemoveBack"){
+            list.RemoveBack();
+        }
+        else if(cmd == "Update"){
+            int temp1, temp2;
+            cin >> temp1 >> temp2;
+            
+            list.Update(temp1, temp2);
+        }
+        else if(cmd == "Max"){
+            list.Max();
+        }
+    }
 }
